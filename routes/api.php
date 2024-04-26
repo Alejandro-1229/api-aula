@@ -26,7 +26,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('v1/user')->group(function () {
         Route::get('/', [PersonController::class, 'getAllPerson']);
         Route::post('/create', [PersonController::class, 'create']);
-        Route::put('/update/{id}', [PersonController::class, 'update']);
+        Route::get('/persons/{user}', [PersonController::class, 'getPersonUser']);
+        Route::put('/update/{person}', [PersonController::class, 'update']);
         Route::patch('/disable/{id}', [PersonController::class, 'disable']);
     });
 });

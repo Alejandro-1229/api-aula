@@ -20,5 +20,7 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call(UserRoleSeeder::class);
+        $this->call(PersonSeeder::class);
+        $this->call(UserSeeder::class);
     }
 }
