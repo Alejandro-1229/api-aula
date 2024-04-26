@@ -17,6 +17,7 @@ class UserServices implements UserServicesInterface
                 'status' => 1
             ]);
         }
+        return $user->status;
     }
 
     public function disableUser(User $user){
@@ -25,6 +26,7 @@ class UserServices implements UserServicesInterface
                 'status' => 2
             ]);
         }
+        return $user->status;
 
     }
 
