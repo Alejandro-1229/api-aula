@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\UserRequest;
 use App\Http\Responses\ApiResponse;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class AuthController extends Controller
         $this->personController = $personController;
     }
 
-    public function register(LoginRequest $request)
+    public function register(UserRequest $request)
     {
         $user = $this->personController->create($request);
 

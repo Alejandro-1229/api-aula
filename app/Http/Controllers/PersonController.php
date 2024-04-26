@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\Http\Responses\ApiResponse;
 use App\Models\Person;
 use App\Models\User;
@@ -44,7 +45,7 @@ class PersonController extends Controller
         }
     }
 
-    public function create(Request $request)
+    public function create(UserRequest $request)
     {
         try {
             $dataPerson = $request->only(['name', 'last_name', 'email', 'cell_phone']);
@@ -58,7 +59,7 @@ class PersonController extends Controller
 
             $user = $this->userServices->createUser($dataUser);
 
-            return ApiResponse::success("Creacion Satisfactoria", 200, $user);
+            return $user;
         } catch (\Throwable $th) {
             return ApiResponse::success($th->getMessage(), 500);
         }
