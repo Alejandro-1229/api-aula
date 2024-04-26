@@ -28,6 +28,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/create', [PersonController::class, 'create']);
         Route::get('/persons/{user}', [PersonController::class, 'getPersonUser']);
         Route::put('/update/{person}', [PersonController::class, 'update']);
-        Route::patch('/disable/{id}', [PersonController::class, 'disable']);
+        Route::patch('/status/{user}', [PersonController::class, 'changeStatus']);
     });
 });
