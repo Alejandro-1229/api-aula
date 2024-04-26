@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Person;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +18,8 @@ return new class extends Migration
             $table->string('user');
             $table->string('password');
             $table->rememberToken();
-            $table->foreignId('people_id')->constrained('people','id')->cascadeOnUpdate()->restrictOnDelete();
+            $table->char('status',1);
+            $table->foreignIdFor(Person::class)->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId('user_roles_id')->constrained('user_roles','id')->cascadeOnUpdate()->restrictOnDelete();
             $table->timestamps();
         });

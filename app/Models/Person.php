@@ -19,6 +19,5 @@ class Person extends Model
         "last_name",
         "email",
         "cell_phone",
-        "status"
     ];
 }

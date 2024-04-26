@@ -18,17 +18,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('register', [AuthController::class, 'register']);
-Route::post('logIn', [AuthController::class, 'logIn']);
+Route::post('logIn',[AuthController::class, 'logIn']);
 
 
-Route::middleware('auth:sanctum')->group(function () {
+//Route::middleware('auth:sanctum')->group(function () {
 
-    Route::post('logOut', [AuthController::class, 'logOut']);
-    
-    Route::prefix('user')->group(function () {
-        Route::get('/', [PersonController::class, 'getAllPerson']);
-        Route::post('/', [PersonController::class, 'create']);
-        Route::put('/', [PersonController::class, 'update']);
-        Route::patch('/', [PersonController::class, 'disable']);
-    });
+Route::post('logOut', [AuthController::class, 'logOut']);
+
+Route::prefix('user')->group(function () {
+    Route::get('/', [PersonController::class, 'getAllPerson']);
+    Route::post('/create', [PersonController::class, 'create']);
+    Route::put('/update/{id}', [PersonController::class, 'update']);
+    Route::patch('/disable/{id}', [PersonController::class, 'disable']);
 });
+//});

@@ -28,18 +28,18 @@ class PersonController extends Controller
     {
         $people = User::with('person')->get();
 
-        return ApiResponse::success('Operation Succesful',201,$people);
+        return ApiResponse::success('Operation Successful',201,$people);
     }
 
     public function create(Request $request)
     {
-        $dataPerson = $request->only(['name', 'last_name', 'email', 'cell_phone', 'status']);
+        $dataPerson = $request->only(['name', 'last_name', 'email', 'cell_phone']);
 
         $person = $this->personServices->createPerson($dataPerson);
     
-        $dataUser = $request->only(['user', 'user_roles_id']);
+        $dataUser = $request->only(['user', 'user_roles_id', 'status']);
         $dataUser['password'] = Hash::make($request->password);
-        $dataUser['people_id'] = $person->id; 
+        $dataUser['person_id'] = $person->id; 
 
         $user = $this->userServices->createUser($dataUser);
     

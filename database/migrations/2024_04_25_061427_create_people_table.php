@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('email',100)->unique();
             $table->string('cell_phone',20);
             $table->text('image')->nullable();
-            $table->char('status',1);
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamps();
         });
