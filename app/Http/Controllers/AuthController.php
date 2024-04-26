@@ -18,7 +18,7 @@ class AuthController extends Controller
         $this->personController = $personController;
     }
 
-    public function register(Request $request)
+    public function register(LoginRequest $request)
     {
         $user = $this->personController->create($request);
 
@@ -33,7 +33,7 @@ class AuthController extends Controller
         return ApiResponse::success("Create Successful", 200, $data);
     }
 
-    public function logIn(LoginRequest $request)
+    public function logIn(Request $request)
     {
         if(!Auth::attempt($request->only('user','password'))){
             return response()->json(['message'=>'Datos Incorrectos'],403);
