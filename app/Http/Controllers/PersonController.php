@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PersonRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Responses\ApiResponse;
 use App\Models\Person;
@@ -9,7 +10,6 @@ use App\Models\User;
 use App\Services\PersonServices;
 use App\Services\UserServices;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class PersonController extends Controller
 {
@@ -45,23 +45,27 @@ class PersonController extends Controller
         }
     }
 
-    public function create(UserRequest $request)
+    public function create(PersonRequest $personRequest, UserRequest $userRequest)
     {
         try {
-            $dataPerson = $request->only(['name', 'last_name', 'email', 'cell_phone']);
+            $dataPerson = $personRequest->all();
 
             $person = $this->personServices->createPerson($dataPerson);
 
-            $dataUser = $request->only(['user', 'user_roles_id']);
-            $dataUser['password'] = Hash::make($request->password);
-            $dataUser['person_id'] = $person->id;
+            $dataUser = $userRequest->all();
             $dataUser['status'] = 1;
+            $dataUser['person_id'] = $person->id;
 
             $user = $this->userServices->createUser($dataUser);
 
-            return $user;
+            $data = [
+                "person" => $person,
+                "user" => $user
+            ];
+
+            return ApiResponse::success("Create Successfull",200,$data);
         } catch (\Throwable $th) {
-            return ApiResponse::success($th->getMessage(), 500);
+            return ApiResponse::error($th->getMessage(), 500);
         }
     }
 

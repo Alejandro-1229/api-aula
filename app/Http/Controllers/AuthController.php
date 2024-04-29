@@ -3,62 +3,72 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\PersonRequest;
 use App\Http\Requests\UserRequest;
 use App\Http\Responses\ApiResponse;
 use App\Models\User;
+use App\Services\PersonServices;
+use App\Services\UserServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use PgSql\Lob;
 
 class AuthController extends Controller
 {
-    private $personController;
 
-    public function __construct(PersonController $personController)
+    private $userServices;
+    private $personServices;
+
+    public function __construct(UserServices $userServices, PersonServices $personServices)
     {
-        $this->personController = $personController;
+        $this->userServices = $userServices;
+        $this->personServices = $personServices;
     }
 
-    public function register(UserRequest $request)
+    public function register(PersonRequest $personRequest, UserRequest $userRequest)
     {
-        $user = $this->personController->create($request);
+        try {
+            $dataPerson = $personRequest->all();
 
-        $token = $user->createToken('API TOKEN')->plainTextToken;
-        $data = [
-            'user' => $user->user,
-            'password' => $user->password,
-            'acces_token' => $token,
-            'token_type' => 'Bearer'
-        ];
+            $person = $this->personServices->createPerson($dataPerson);
 
-        return ApiResponse::success("Create Successful", 200, $data);
-    }
+            $dataUser = $userRequest->all();
+            $dataUser['status'] = 1;
+            $dataUser['person_id'] = $person->id;
 
-    public function logIn(Request $request)
-    {
-        if(!Auth::attempt($request->only('user','password'))){
-            return response()->json(['message'=>'Datos Incorrectos'],403);
+            $user = $this->userServices->createUser($dataUser);
+
+            $token = $user->createToken('API TOKEN')->plainTextToken;
+            $data = [
+                'user' => $user->user,
+                'acces_token' => $token,
+                'token_type' => 'Bearer'
+            ];
+
+            return ApiResponse::success("Create Successful", 200, $data);
+        } catch (\Throwable $th) {
+            return ApiResponse::error($th->getMessage(), 500);
         }
-        
-        $user = User::where('user', $request['user'])->firstOrFail();
-        $token =  $user->createToken('API TOKEN')->plainTextToken;
+    }
 
-        $data = [
-            'Message' => 'Hi '.$user->user,
-            'AccessToken' => $token,
-            'Token Type' => 'Bearer',
-            'User' => $user
-        ];
+    public function logIn(LoginRequest $loginRequest)
+    {
+        try {
+            $data = $this->userServices->logIn($loginRequest);
 
-        return response()->json($data, 200);
+            return ApiResponse::success('Success', 200, $data);
+        } catch (\Throwable $th) {
+            return ApiResponse::error($th->getMessage(), 500);
+        }
     }
 
     public function logOut(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        try {
+            $message = $this->userServices->logOut($request);
 
-        $menssage = 'LogOut Succesfull';
-
-        return $menssage;
+            return ApiResponse::success('Success', 200, $message);
+        } catch (\Throwable $th) {
+            return ApiResponse::error($th->getMessage(), 500);
+        }
     }
 }
