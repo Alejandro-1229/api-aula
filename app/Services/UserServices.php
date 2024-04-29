@@ -35,9 +35,6 @@ class UserServices implements UserServicesInterface
 
     public function logIn(LoginRequest $loginRequest)
     {
-        if(!Auth::attempt($loginRequest->only('user','password'))){
-            return response()->json(['message'=>'Datos Incorrectos'],403);
-        }
         
         $user = User::where('user', $loginRequest['user'])->firstOrFail();
         $token =  $user->createToken('API TOKEN')->plainTextToken;

@@ -2,7 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Responses\ApiResponse;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class LoginRequest extends FormRequest
 {
@@ -22,8 +26,10 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user' => 'required|exists:users,user',
+            'user' => 'required',
             'password' => 'required|min:8'
         ];
     }
+
+
 }
