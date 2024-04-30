@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PersonController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,10 +25,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logOut', [AuthController::class, 'logOut']);
 
     Route::prefix('v1/user')->group(function () {
-        Route::get('/', [PersonController::class, 'getAllPerson']);
         Route::post('/create', [PersonController::class, 'create']);
-        Route::get('/persons/{user}', [PersonController::class, 'getPersonUser']);
         Route::put('/update/{person}', [PersonController::class, 'update']);
         Route::patch('/status/{user}', [PersonController::class, 'changeStatus']);
+    });
+
+    Route::prefix('v1/getUsers')->group(function(){
+        Route::get('/user/{user}', [UserController::class, 'getSpecificUser']);
+        Route::get('/docentes',[UserController::class,'getDocentes']);
+        Route::get('/estudiantes',[UserController::class,'getEstudiantes']);
+        Route::get('/auxiliares',[UserController::class,'getAuxiliares']);
     });
 });

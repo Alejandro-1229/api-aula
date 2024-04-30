@@ -19,11 +19,15 @@ class UserRoleSeeder extends Seeder
         ]);
 
         UserRole::create([
-            "role_description" => "teacher"
+            "role_description" => "docente"
         ]);
 
         UserRole::create([
-            "role_description" => "student"
+            "role_description" => "estudiante"
+        ]);
+        
+        UserRole::create([
+            "role_description" => "auxiliar"
         ]);
     }
 }

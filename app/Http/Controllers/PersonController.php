@@ -25,26 +25,6 @@ class PersonController extends Controller
     }
 
 
-    public function getAllPerson()
-    {
-        try {
-            $people = User::with('person')->select('id', 'user', 'status', 'person_id', 'user_roles_id')->get();
-            return ApiResponse::success('Operation Successful', 201, $people);
-        } catch (\Throwable $th) {
-            return ApiResponse::error($th->getMessage(), 500);
-        }
-    }
-
-    public function getPersonUser(int $id)
-    {
-        try {
-            $people = User::with('person')->select('id', 'user', 'status', 'person_id', 'user_roles_id')->where('person_id', $id)->get();
-            return ApiResponse::success('Operation Successful', 201, $people);
-        } catch (\Throwable $th) {
-            return ApiResponse::error($th->getMessage(), 500);
-        }
-    }
-
     public function create(PersonRequest $personRequest, UserRequest $userRequest)
     {
         try {

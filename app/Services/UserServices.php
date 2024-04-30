@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Contracts\UserServicesInterface;
+use App\Http\Responses\ApiResponse;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -10,6 +11,26 @@ class UserServices implements UserServicesInterface
     public function createUser(array $userData)
     {
         return User::create($userData);
+    }
+
+    public function getRolUser(int $idRol)
+    {
+        try {
+            $users = User::with('person')->select('id', 'user', 'status', 'person_id', 'user_roles_id')->where('user_roles_id',$idRol)->get();
+            return $users;
+        } catch (\Throwable $th) {
+            return ApiResponse::error($th->getMessage(), 500);
+        }
+    }
+
+    public function getSpecificUser(int $idPerson)
+    {
+        try {
+            $user = User::with('person')->select('id', 'user', 'status', 'person_id', 'user_roles_id')->where('person_id', $idPerson)->get();
+            return $user;
+        } catch (\Throwable $th) {
+            return ApiResponse::error($th->getMessage(), 500);
+        }
     }
 
     public function enableUser(User $user){

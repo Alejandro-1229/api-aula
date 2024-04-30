@@ -13,6 +13,10 @@ interface UserServicesInterface
 
     public function enableUser(User $user);
 
+    public function getRolUser(int $idRol);
+
+    public function getSpecificUser(int $idPerson);
+
     public function logIn(User $user);
 
     public function logOut(Request $request);
