@@ -2,10 +2,8 @@
 namespace App\Services;
 
 use App\Contracts\UserServicesInterface;
-use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class UserServices implements UserServicesInterface
 {
@@ -33,10 +31,9 @@ class UserServices implements UserServicesInterface
 
     }
 
-    public function logIn(LoginRequest $loginRequest)
+    public function logIn(User $user)
     {
         
-        $user = User::where('user', $loginRequest['user'])->firstOrFail();
         $token =  $user->createToken('API TOKEN')->plainTextToken;
 
         $data = [
